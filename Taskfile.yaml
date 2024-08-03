@@ -1,0 +1,9 @@
+---
+version: "3"
+
+includes:
+  docker: .taskfiles/docker
+
+tasks:
+  default:
+    cmds: ["task -l"]

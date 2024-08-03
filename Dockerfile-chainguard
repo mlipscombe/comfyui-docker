@@ -1,0 +1,39 @@
+# Stage 1: Build
+FROM chainguard/python:latest-dev AS builder
+# 2.3.0-cuda12.1-cudnn8-runtime AS builder
+# FROM cgr.dev/chainguard/pytorch-cuda12:latest AS builder
+ARG TAG_VERSION=v0.0.2
+USER root
+ENV ROOT=/app
+WORKDIR ${ROOT}
+RUN mkdir -p /nonroot/.cache/pip
+RUN --mount=type=cache,target=/nonroot/.cache/pip \
+  git clone https://github.com/comfyanonymous/ComfyUI.git ${ROOT} && \
+  cd ${ROOT} && \
+  git checkout ${TAG_VERSION} && \
+  pip install -r requirements.txt
+
+COPY . ${ROOT}
+RUN chown -R nonroot.nonroot /app/
+RUN chown -R nonroot.nonroot /nonroot/
+RUN chmod u+x entrypoint.sh
+
+# # Stage 2: Minimal Image
+FROM cgr.dev/chainguard/pytorch-cuda12:latest
+USER nonroot
+
+ENV ROOT=/app
+WORKDIR ${ROOT}
+
+# RUN apk add python-${version}
+ENV ROOT=/app
+ENV NVIDIA_VISIBLE_DEVICES=all PYTHONPATH="${PYTHONPATH}:${ROOT}" CLI_ARGS="" PATH="${PATH}:${ROOT}"
+
+# Copy the application from the builder stage
+COPY --from=builder /app ${ROOT}
+# And the pip cache
+COPY --from=builder /nonroot /nonroot
+
+EXPOSE 7860
+ENTRYPOINT ["entrypoint.sh"]
+CMD python -u main.py --listen --port 7860 ${CLI_ARGS}

@@ -1,0 +1,12 @@
+---
+version: "3"
+
+tasks:
+  build:
+    desc: Build docker container
+    cmds:
+      - docker build -f Dockerfile-chainguard -t comfyui .
+  run:
+    desc: Run docker container
+    cmds:
+      - docker run -it --entrypoint /bin/bash comfyui

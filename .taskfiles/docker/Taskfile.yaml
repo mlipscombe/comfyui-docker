@@ -5,7 +5,11 @@ tasks:
   build:
     desc: Build docker container
     cmds:
-      - docker build -f Dockerfile-chainguard -t comfyui .
+      - docker build -f Dockerfile-chainguard -t ghcr.io/mlipscombe/comfyui .
+  push:
+    desc: Push docker container
+    cmds:
+      - docker push ghcr.io/mlipscombe/comfyui
   run:
     desc: Run docker container
     cmds:

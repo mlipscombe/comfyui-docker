@@ -37,4 +37,10 @@ comfyui:
   loras: models/Lora
   upscale_models: models/upscale_models
   vae: models/VAE
+  animatediff_models: models/animatediff_models
+  GPTcheckpoints: models/GPTcheckpoints
+  ipadapter: models/ipadapter
+  inpaint: models/inpaint
+  llama: models/llama
+  unet: models/unet
 

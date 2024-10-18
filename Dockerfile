@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
+FROM pytorch/pytorch:2.5.0-cuda12.4-cudnn9-runtime
 ARG TAG_VERSION=v0.2.3
 
 ENV DEBIAN_FRONTEND=noninteractive PIP_PREFER_BINARY=1
